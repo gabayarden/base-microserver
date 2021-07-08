@@ -4,8 +4,7 @@ export class BaseDao {
       objectModel.createdTime = new Date();
       const createdObject = await objectModel.save();
       return  {
-          ...createdObject,
-          id: createdObject._id
+          createdObject
       };
     } catch(error) {
       throw {message: "Can't create object", error};
