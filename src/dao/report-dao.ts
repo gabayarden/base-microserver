@@ -1,22 +1,24 @@
-import multer from 'multer';
-import formidable from 'formidable';
+import mongoose from 'mongoose';
 import { BaseDao } from "./base-dao";
 import Report from '../models/report';
-
-var upload = multer({dest: __dirname+'/public/reports/'})
+import Version from '../models/version';
 
 export class ReportDao extends BaseDao {
 
-    async postReport(req) {
+    async getReports(req, res) {
+      var params = {};
+      var reports =  await this.find(Report, params);
+      //await reports.populate('Version', '_id name');
+      return reports;
+    }
 
-        var form = new formidable.IncomingForm()
-        var report = new Report();
-        await form.parse(req, (err, fields, files)=> {
-            var path:String = Date.now() + '-' + files.report.name;
-            path = '/public/reports/' + path.replace(/ /g, '');
-            report.name = files.report.name.split('.')[0];
-            report.path = path;
-        })
-        return this.create(report);
+    async getReportsByVersion(req, res){
+      var versionId = mongoose.Types.ObjectId(req.params.version);
+      var report = await this.findOne(Report, {versions: versionId})
+      var version = await this.findOne(Version, {_id: versionId})
+      return {
+        report: report,
+        version: version
+      }
     }
 }

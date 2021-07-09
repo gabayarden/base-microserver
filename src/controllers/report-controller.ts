@@ -4,14 +4,20 @@ import ReportService from '../services/report-service';
 
 export class ReportController {
     public router = express.Router();
-
     constructor(){
-        this.router.post('', responseHandler(this.postReport));
+        this.router.get('', responseHandler(this.getReports));
+        this.router.get('/:version', responseHandler(this.getReportsByVersion))
     }
 
-    async postReport(req, res, next){
+    async getReports(req, res, next){
         const reportService: ReportService = new ReportService();
-        const reportResult = await reportService.postReport(req);
-        return reportResult;
+        const result = reportService.getReports(req, res);
+        return result;
+    }
+
+    async getReportsByVersion(req, res, next){
+        const reportService: ReportService = new ReportService();
+        const result = reportService.getReportsByVersion(req, res);
+        return result;
     }
 }

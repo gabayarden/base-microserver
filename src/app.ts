@@ -9,6 +9,8 @@ import contextService from 'request-context';
 import { Context } from "./context";
 import { TestController } from "./controllers/test-controller";
 import {ReportController} from "./controllers/report-controller";
+import {VersionController} from "./controllers/version-controller";
+import {CommentController} from "./controllers/comment-controller";
 
 const app: express.Application = express();
 
@@ -52,8 +54,17 @@ app.use((req, res, next) => {
 
 app.use(scopePerRequest(container));
 
+import './models/report';
+import './models/version';
+import './models/comment';
+
+app.use(express.static('public'))
+
+
 app.use("/api/test", new TestController().router);
 app.use("/report/pdf", new ReportController().router)
+app.use("/report/pdf/version", new VersionController().router)
+app.use("/report/pdf/comment", new CommentController().router)
 
 app.use((req, res, next) => {
   if (!req.route)

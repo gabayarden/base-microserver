@@ -4,7 +4,8 @@ export class BaseDao {
       objectModel.createdTime = new Date();
       const createdObject = await objectModel.save();
       return  {
-          createdObject
+        ...createdObject,
+        id: createdObject._id
       };
     } catch(error) {
       throw {message: "Can't create object", error};
@@ -14,6 +15,14 @@ export class BaseDao {
   protected async findOne(objectModel, parameters) {
     try {
       return await objectModel.findOne(parameters);
+    } catch(error) {
+      throw {message: "Can't find object", error};
+    }
+  }
+
+  protected async findById(objectModel, id) {
+    try {
+      return await objectModel.findById(id);
     } catch(error) {
       throw {message: "Can't find object", error};
     }
@@ -40,6 +49,14 @@ export class BaseDao {
       return await objectModel.find(parameters);
     } catch(error) {
       throw {message: "Can't find objects", error};
+    }
+  }
+
+  protected async update(objectModel) {
+    try {
+      return await objectModel.save();
+    } catch(error) {
+      throw {message: "Can't delete objects", error};
     }
   }
 }

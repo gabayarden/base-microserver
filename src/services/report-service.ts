@@ -7,7 +7,11 @@ export default class ReportService {
         this.reportDao = new ReportDao();
     }
 
-    async postReport(req) {
-        return await this.reportDao.postReport(req);
+    async getReports(req, res){
+        return await this.reportDao.getReports(req, res)
+    }
+
+    async getReportsByVersion (req, res) {
+        return await this.reportDao.getReportsByVersion(req, res)
     }
 }
